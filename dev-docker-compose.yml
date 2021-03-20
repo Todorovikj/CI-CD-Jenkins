@@ -1,0 +1,29 @@
+version: '3'
+
+networks:
+  dev_f1_app:
+  f1_app:
+    
+services:
+    dev-f1-backend:
+        image: "todorovikj/f1_backend"
+        ports:
+            - "8081:8080"
+        volumes:
+            - "./dev/Backend_gradle/build/libs:/home/myApp"
+        networks:
+            - dev_f1_app
+        container_name: dev-f1-backend
+
+    dev-f1-angular:
+        image: "todorovikj/angular_app_container"
+        ports:
+            - "4000:4200"
+        volumes:
+            - "./dev/Angular/dev-nginx/:/etc/nginx/conf.d:ro"
+            - "./dev/Angular/dist/Angular:/usr/share/nginx/html:ro"
+        networks:
+            - dev_f1_app
+            - f1_app
+        container_name: dev-f1-angular
+

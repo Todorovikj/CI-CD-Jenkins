@@ -1,0 +1,16 @@
+FROM ubuntu
+
+RUN mkdir /usr/src/app/
+WORKDIR /usr/src/app
+
+RUN apt-get update
+RUN apt-get -y install curl gnupg
+RUN apt-get -y install nodejs
+RUN apt-get -y install npm
+RUN npm install -g npm@latest
+RUN npm uninstall -g angular-cli
+RUN npm cache clear --force
+RUN npm install -g @angular/cli@latest
+RUN npm install --save-dev @angular-devkit/build-angular
+
+ENTRYPOINT ng build --prod

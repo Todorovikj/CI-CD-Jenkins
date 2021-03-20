@@ -1,0 +1,45 @@
+---
+- name: Copy project files
+  hosts: azure-server
+  become: true
+  tasks:
+
+    - name: Create project directory
+      file:
+        path: /home/AnIS/dev
+        state: directory
+
+    - name: Copy docker-compose
+      copy:
+        src: "./../dev-docker-compose.yml"
+        dest: "/home/AnIS/dev-docker-compose.yml"
+        mode: 0777
+
+    - name: Copy back-end jar
+      copy:
+        src: "./../Backend_gradle/build/libs/"
+        dest: "/home/AnIS/dev/Backend_gradle/build/libs/"
+        mode: 0777
+
+    - name: Copy angular build files
+      copy:
+        src: "./../Angular/dist/Angular/"
+        dest: "/home/AnIS/dev/Angular/dist/Angular/"
+        mode: 0777
+
+    - name: Copy angular nginx files
+      copy:
+        src: "./../Angular/dev-nginx/"
+        dest: "/home/AnIS/dev/Angular/dev-nginx/"
+        mode: 0777
+
+
+- name: Restart docker-compose containers
+  hosts: azure-server
+  become: true
+  tasks:
+    - name: Stop docker compose
+      command: chdir=/home/AnIS docker-compose -f dev-docker-compose.yml stop
+
+    - name: Start docker compose
+      command: chdir=/home/AnIS docker-compose -f dev-docker-compose.yml up -d

@@ -1,0 +1,16 @@
+---
+- name: Copy ssh keys
+  hosts: azure-server
+  become: true
+  tasks:
+    - name: Copy id_rsa
+      copy:
+        src: "/home/nebojsha/.ssh/id_rsa"
+        dest: "/var/jenkins_home/.ssh/id_rsa"
+        mode: 0777
+
+    - name: Copy id_rsa
+      copy:
+        src: "/home/nebojsha/.ssh/id_rsa.pub"
+        dest: "/var/jenkins_home/.ssh/id_rsa.pub"
+        mode: 0777
